@@ -1,13 +1,19 @@
-
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
-
+import boto3
+from botocore.exceptions import BotoCoreError, ClientError
 
 app = Flask(__name__)
 CORS(app)  # Allow all origins
 
-
 logged_user=0
+
+dynamodb = boto3.resource(
+    'dynamodb',
+    aws_access_key_id='AKIATQPTFUEWDLBTCJET',
+    aws_secret_access_key='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',
+    region_name='us-east-1'
+)
 def get_userID():
     return 2
 
@@ -26,12 +32,19 @@ def search_events():
 
 @app.route('/events', methods=['GET'])
 def get_events():
-    # Example: Fetch event data
-    # need to call the fetch from database Hardik do this! and have this search wheather it 
-    # to do this we will search the db for the user
+    table = dynamodb.Table('events')
+    try:
+        response = table.scan()
+        events = response.get('items', []) 
 
-    # take the list of event ids and then search the events 
-    return {"events": [{"id": 1, "name": "Concert", "description":"Loud and proud Tyler sucks at bedwars"}, {"id": 2, "name": "Art Exhibition", "description":"this is the event description"}]}
+        while 'LastEvaluatedKey' in response:
+            response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+            events.extend(response.get('Items', []))
+
+        return jsonify(events)  
+    except (BotoCoreError, ClientError) as error:
+        print(f"Error fetching events: {error}")
+        return jsonify({'error': str(error)}), 500  
 
 """
 @app.route('/tylers_boyfriend',methods=['GET'])
@@ -63,3 +76,6 @@ def get_results():
 
 
 #-------------------------------------
+
+if __name__ == "__main__":
+    app.run(debug=True)
