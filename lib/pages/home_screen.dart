@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/pages/add_event.dart';
 import 'package:hive/services/fetch.dart'; // Adjust the path based on your folder structure
+import 'package:hive/pages/details.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,30 +40,23 @@ class HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 16.0),
                   child: SizedBox(
-                    width: 200,
+                    width: 200, // Smaller width for the button
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, // Center the button horizontally
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: Text(event['name']),
-                                content:
-                                    Text('Event ID: ${event['description']}'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Close'),
-                                  ),
-                                ],
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailsScreen(eventId: event['id']),
                               ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(1000,
-                                60), // Set a smaller width and larger height for the button
+                            minimumSize: const Size(1000, 60),
                           ),
                           child: Text(
                             '${event['name']} (ID: ${event['id']})',
@@ -96,6 +91,14 @@ class HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    EventCreator() // this should bte the page of the form
+                ));
+      }),
     );
   }
 }

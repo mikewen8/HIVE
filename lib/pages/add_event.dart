@@ -10,6 +10,12 @@ class EventCreator extends StatefulWidget {
 class _EventCreatorState extends State<EventCreator> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Search things to do with the event search bar below",
+            style: TextStyle(fontFamily: "comic-sans", fontSize: 30)),
+      ),
+    );
   }
 }
