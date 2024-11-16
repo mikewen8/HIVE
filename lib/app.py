@@ -12,7 +12,7 @@ CORS(app)  # Allow all origins
 @app.route('/events', methods=['GET'])
 def get_events():
     # Example: Fetch event data
-    # need to call the fetch from database Aadi-Arnav-Hardik do this! and have this search wheather it 
+    # need to call the fetch from database Hardik do this! and have this search wheather it 
     return {"events": [{"id": 1, "name": "Concert", "description":"Loud and proud Tyler sucks at bedwars"}, {"id": 2, "name": "Art Exhibition", "description":"this is the event description"}]}
 
 """

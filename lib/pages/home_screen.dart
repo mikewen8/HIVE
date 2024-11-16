@@ -36,32 +36,52 @@ class HomeScreenState extends State<HomeScreen> {
                 final event = snapshot.data![index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 200.0),
+                      vertical: 8.0, horizontal: 16.0),
                   child: SizedBox(
-                    width:
-                        10, //double.infinity, // Make the button fill the container width
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Define what happens when the button is pressed
-                        showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                            title: Text(event['name']),
-                            // this needs to be description
-                            content: Text('Event ID: ${event['description']}'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Close'),
+                    width: 200, // Smaller width for the button
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, // Center the button horizontally
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            // Define what happens when the button is pressed
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                title: Text(event['name']),
+                                content:
+                                    Text('Event ID: ${event['description']}'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text('Close'),
+                                  ),
+                                ],
                               ),
-                            ],
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(1000,
+                                60), // Set a smaller width and larger height for the button
                           ),
-                        );
-                      },
-                      child: Text(
-                        '${event['name']} (ID: ${event['id']})',
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                          child: Text(
+                            '${event['name']} (ID: ${event['id']})',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: IconButton(
+                            icon: const Icon(Icons.more_vert),
+                            onPressed: () {
+                              // Handle the icon press
+                              // have a delete option here to remove from the database
+                              print('More options for event ${event['id']}');
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
