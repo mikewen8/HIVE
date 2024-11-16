@@ -62,7 +62,7 @@ class HomeScreenState extends State<HomeScreen> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            minimumSize: Size(1000,
+                            minimumSize: const Size(1000,
                                 60), // Set a smaller width and larger height for the button
                           ),
                           child: Text(
