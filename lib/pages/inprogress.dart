@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/pages/add_event.dart';
 import 'package:hive/services/fetch.dart'; // Adjust the path based on your folder structure
 import 'package:hive/pages/details.dart';
 
@@ -90,6 +91,14 @@ class HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    EventCreator() // this should bte the page of the form
+                ));
+      }),
     );
   }
 }
