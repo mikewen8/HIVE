@@ -15,18 +15,29 @@ Future<String> fetchEvents() async {
   }
 }
 
-
-
 Future<List<Map<String, dynamic>>> fetchEventList() async {
   try {
     final response = await http.get(Uri.parse('http://127.0.0.1:5000/events'));
     if (response.statusCode == 200) {
       final List events = jsonDecode(response.body)['events'];
-      return events.map((e) => {'id': e['id'], 'name': e['name'], 'description':e['description']}).toList();
+      return events
+          .map((e) => {
+                'id': e['id'],
+                'name': e['name'],
+                'description': e['description']
+              })
+          .toList();
     } else {
       throw Exception("Failed to load events");
     }
   } catch (e) {
     throw Exception("Error fetching events: $e");
   }
+}
+
+Future<Map<String, dynamic>> fetchEventDetails(int eventId) async {
+  // Simulate fetching event details. Replace with your actual API call.
+  final events =
+      await fetchEventList(); // Replace with your backend call if needed
+  return events.firstWhere((event) => event['id'] == eventId, orElse: () => {});
 }
