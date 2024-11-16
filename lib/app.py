@@ -27,3 +27,21 @@ def get_results():
 # need to create a get and post call need to assign a user and a login page for the user
 # we need ot use this so in the data base we can display the users current events
 # then we also need a delete event from data base route 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#-------------------------------------
