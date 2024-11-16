@@ -91,14 +91,17 @@ class HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    EventCreator() // this should bte the page of the form
-                ));
-      }),
+      floatingActionButton: Align(
+        alignment: Alignment.center,
+        child: FloatingActionButton(onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      EventCreator() // this should bte the page of the form
+                  ));
+        }),
+      ),
     );
   }
 }
