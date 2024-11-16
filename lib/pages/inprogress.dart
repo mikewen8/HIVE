@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eventapp/services/fetch.dart'; // Adjust the path based on your folder structure
+import 'package:hive/services/fetch.dart'; // Adjust the path based on your folder structure
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,11 +35,13 @@ class HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 final event = snapshot.data![index];
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                   child: SizedBox(
                     width: 200, // Smaller width for the button
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center, // Center the button horizontally
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, // Center the button horizontally
                       children: [
                         ElevatedButton(
                           onPressed: () {
@@ -48,7 +50,8 @@ class HomeScreenState extends State<HomeScreen> {
                               context: context,
                               builder: (_) => AlertDialog(
                                 title: Text(event['name']),
-                                content: Text('Event ID: ${event['description']}'),
+                                content:
+                                    Text('Event ID: ${event['description']}'),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
@@ -59,7 +62,8 @@ class HomeScreenState extends State<HomeScreen> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            minimumSize: Size(1000, 60), // Set a smaller width and larger height for the button
+                            minimumSize: const Size(1000,
+                                60), // Set a smaller width and larger height for the button
                           ),
                           child: Text(
                             '${event['name']} (ID: ${event['id']})',
