@@ -36,8 +36,6 @@ Future<List<Map<String, dynamic>>> fetchEventList() async {
 }
 
 Future<Map<String, dynamic>> fetchEventDetails(int eventId) async {
-  // Simulate fetching event details. Replace with your actual API call.
-  final events =
-      await fetchEventList(); // Replace with your backend call if needed
+  final events = await fetchEventList();
   return events.firstWhere((event) => event['id'] == eventId, orElse: () => {});
 }

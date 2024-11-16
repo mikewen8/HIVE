@@ -38,14 +38,12 @@ class HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 16.0),
                   child: SizedBox(
-                    width: 200, // Smaller width for the button
+                    width: 200,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .center, // Center the button horizontally
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            // Define what happens when the button is pressed
                             showDialog(
                               context: context,
                               builder: (_) => AlertDialog(
