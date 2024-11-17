@@ -80,7 +80,10 @@ class TicketmasterClient:
         json_event_list = json.dumps(event_dict)
         return json_event_list
 
-    
+    def decimal_converter(obj):
+        if isinstance(obj, Decimal):
+            return float(obj)  # You can also use `str(obj)` if you prefer string representation
+        raise TypeError("Type not serializable")
     
     def similar_events(self, json_event_list, query):
         event_list = json.loads(json_event_list)['events']
@@ -103,7 +106,3 @@ class TicketmasterClient:
         
         json_similar_events = json.dumps(similar_events)
         return json_similar_events
-
-        
-
-        

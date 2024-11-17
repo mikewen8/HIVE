@@ -21,8 +21,6 @@ Future<List<Map<String, dynamic>>> fetchEventList() async {
 
     if (response.statusCode == 200) {
       final List events = jsonDecode(response.body)['events'];
-      print(events);
-      print(events);
       return events
           .map((e) => {
                 'name': e['Event'],
@@ -38,7 +36,6 @@ Future<List<Map<String, dynamic>>> fetchEventList() async {
   }
 }
 
-Future<Map<String, dynamic>> fetchEventDetails(String eventId) async {
 Future<Map<String, dynamic>> fetchEventDetails(String eventId) async {
   final events = await fetchEventList();
   return events.firstWhere((event) => event['id'] == eventId, orElse: () => {});
