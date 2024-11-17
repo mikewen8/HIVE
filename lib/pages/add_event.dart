@@ -18,6 +18,10 @@ class _EventCreatorState extends State<EventCreator> {
               "Search things to do with the event search bar below",
               style: TextStyle(fontFamily: "comic-sans", fontSize: 30)),
         ),
-        body: ElevatedButton(onPressed: () {}, child: child));
+        bottomNavigationBar: FloatingActionButton(
+            onPressed:
+                () // two events will happen the scope below a post request for a event for that user
+                {},
+            child: const Text("ADD EVENT")));
   }
 }

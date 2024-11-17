@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/services/fetch.dart'; // Adjust based on your file structure
 
 class DetailsScreen extends StatelessWidget {
-  final int eventId;
+  final String eventId;
 
   const DetailsScreen({
     super.key,
