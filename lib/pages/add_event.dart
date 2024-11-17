@@ -28,7 +28,7 @@ class _EventCreatorState extends State<EventCreator> {
     if (isSuccess) {
       // Show a success message or navigate
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Event added successfully!")),
+        const SnackBar(content: Text("searching")),
       );
     } else {
       // Show an error message
