@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+import json
 from flask_cors import CORS
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
@@ -39,7 +40,7 @@ def events():
          while 'LastEvaluatedKey' in response:
              response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
              events.extend(response.get('Items', []))
-         # Properly serialize and return the events
+         # Properly serialize and return the events         
          return jsonify({"events":events})
      except (BotoCoreError, ClientError) as error:
          print(f"Error fetching events: {error}")
@@ -65,8 +66,8 @@ def get_string():
         while 'LastEvaluatedKey' in doom:
              doom = table.scan(ExclusiveStartKey=doom['LastEvaluatedKey'])
              pray.extend(doom.get('Items', []))
-        print(jsonify({'events':pray}))
-        similar_events = tkm.similar_events(jsonify({'events':pray}),query)
+        prayer={'events':pray}
+        similar_events = tkm.similar_events(json.dumps(prayer),query)
         print(similar_events)
 
         # Send a success response
