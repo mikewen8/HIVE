@@ -31,7 +31,7 @@ class _EventDisplayPageState extends State<EventDisplayPage> {
         headers: {"Content-Type": "application/json"},
         body: json.encode({"query": "your_search_query_here"}),
       );
-
+      print(response);
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
@@ -41,7 +41,7 @@ class _EventDisplayPageState extends State<EventDisplayPage> {
 
         final events = data["events"]
             .map((e) => {
-                  'name': e['name'],
+                  'name': e['Event'],
                   'description': e['description'],
                   'type': e['type'],
                   'venue': e['venue']

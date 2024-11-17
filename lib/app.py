@@ -82,9 +82,9 @@ def get_string():
         prayer={'events':pray}
         #sending = tkm.similar_events(json.dumps(prayer),query)
         # Send a success response
-        #print(similar_events)
         #sending.replace('\\','')
         sending = tkm.similar_events(json.dumps(prayer),query)
+        #print(sending)
         return sending
 
     except Exception as e:
@@ -96,6 +96,46 @@ def get_string():
 from flask import request, jsonify
 
 @app.route('/', methods=['GET', 'POST'])
+
+
+# API: Signup
+@app.route('/api/signup', methods=['POST'])
+def signup():
+    data = request.json
+    name = data.get('name')
+    email = data.get('email')
+    password = data.get('password')
+
+    table.put_item(
+        Item={
+            'name': name,
+            'email': email,
+            'password': password
+        }
+    )
+    return jsonify({'message': 'Registration successful!'}), 201
+
+# API: Login
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+
+    response = table.query(
+        KeyConditionExpression=Key('email').eq(email)
+    )
+    items = response['Items']
+
+    if not items:
+        return jsonify({'error': 'User not found'}), 404
+
+    user = items[0]
+    if password == user['password']:
+        session['user_id'] = user['email']  # Store email in session
+        return jsonify({'message': 'Login successful!', 'name': user['name']}), 200
+    else:
+        return jsonify({'error': 'Invalid password'}), 401
 
 
 @app.route('/events', methods=['GET'])
@@ -163,6 +203,8 @@ def get_results():
     # this will be where the call from tylers api call goes 
     return "lol"
 """
+
+
 
 # ----------------------------------
 #maybe create a route for the user to make a post call for example 

@@ -9,6 +9,8 @@ import json
 import ast
 from dotenv import load_dotenv
 import os
+from decimal import Decimal
+
 
 # Load env variables
 load_dotenv()
