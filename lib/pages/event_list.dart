@@ -5,7 +5,10 @@ import 'package:http/http.dart' as http; // For HTTP requests
 import 'package:url_launcher/url_launcher.dart'; // For launching URLs
 
 class EventDisplayPage extends StatefulWidget {
-  const EventDisplayPage({super.key});
+  final String query;
+
+  const EventDisplayPage(
+      {super.key, required this.query}); // Accept the query as a parameter
 
   @override
   _EventDisplayPageState createState() => _EventDisplayPageState();
@@ -26,20 +29,22 @@ class _EventDisplayPageState extends State<EventDisplayPage> {
     try {
       const url =
           'http://127.0.0.1:5000/send'; // Replace with your Flask API URL
-      final response = await http.post(
+      final hail = await http.post(
         Uri.parse(url),
         headers: {"Content-Type": "application/json"},
-        body: json.encode({"query": "your_search_query_here"}),
+        body: json.encode({
+          "query": widget.query
+        }), // Use the query passed from the previous page
       );
-      print(response);
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+      print(hail);
+      if (hail.statusCode == 200) {
+        final stuff = json.decode(hail.body);
 
-        for (final e in data["events"]) {
+        for (final e in stuff["events"]) {
           //print(e);
         }
 
-        final events = data["events"]
+        final events = stuff["events"]
             .map((e) => {
                   'name': e['Event'],
                   'description': e['description'],
@@ -56,7 +61,7 @@ class _EventDisplayPageState extends State<EventDisplayPage> {
         });
       } else {
         throw Exception(
-            'Failed to load events. Status code: ${response.statusCode}');
+            'Failed to load events. Status code: ${hail.statusCode}');
       }
     } catch (e) {
       setState(() {
@@ -121,52 +126,6 @@ class _EventDisplayPageState extends State<EventDisplayPage> {
                         );
                       },
                     ),
-    );
-  }
-}
-
-class EventDetailsPage extends StatelessWidget {
-  final Map<String, dynamic> event;
-
-  const EventDetailsPage({super.key, required this.event});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(event['name'] ?? 'Event Details'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Name: ${event['name'] ?? 'Unnamed Event'}'),
-            Text('Type: ${event['type'] ?? 'Unknown'}'),
-            Text('Genre: ${event['genre'] ?? 'N/A'}'),
-            Text('Date: ${event['date'] ?? 'TBD'}'),
-            Text('Time: ${event['time'] ?? 'TBD'}'),
-            Text('Venue: ${event['venue'] ?? 'Unknown'}'),
-            Text('Address: ${event['address'] ?? 'No address available'}'),
-            Text('Location: ${event['location'] ?? 'No location data'}'),
-            Text('Description: ${event['description'] ?? 'No description'}'),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                final url = event['link'];
-                if (url != null && await canLaunch(url)) {
-                  await launch(url);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Could not open the link')),
-                  );
-                }
-              },
-              child: const Text("View More"),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

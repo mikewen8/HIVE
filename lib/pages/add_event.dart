@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/services/event_logic.dart'; // Adjust the path based on your folder structure
-
 import 'package:hive/pages/event_list.dart';
 
 class EventCreator extends StatefulWidget {
@@ -30,9 +29,9 @@ class _EventCreatorState extends State<EventCreator> {
         eventDescription); // Call the addEvent method
 
     if (isSuccess) {
-      // Show a success message or navigate
+      // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("searching")),
+        const SnackBar(content: Text("Searching for events...")),
       );
     } else {
       // Show an error message
@@ -80,13 +79,19 @@ class _EventCreatorState extends State<EventCreator> {
                 borderRadius: BorderRadius.circular(30), // Rounded corners
               ),
             ),
-            onPressed: () {
+            onPressed: () async {
+              // First, handle adding the event
               handleAddEvent();
+
+              // After adding the event, navigate to the EventDisplayPage
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EventDisplayPage(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EventDisplayPage(
+                    query: eventDescription, // Pass the event description
+                  ),
+                ),
+              );
             }, // Use the handleAddEvent method when button is pressed
 
             child: const Text(
