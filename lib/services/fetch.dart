@@ -21,6 +21,7 @@ Future<List<Map<String, dynamic>>> fetchEventList() async {
 
     if (response.statusCode == 200) {
       final List events = jsonDecode(response.body)['events'];
+      print(events);
       return events
           .map((e) => {
                 'name': e['name'],

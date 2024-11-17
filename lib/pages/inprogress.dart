@@ -96,7 +96,7 @@ class HomeScreenState extends State<HomeScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    EventCreator() // this should bte the page of the form
+                    const EventCreator() // this should bte the page of the form
                 ));
       }),
     );

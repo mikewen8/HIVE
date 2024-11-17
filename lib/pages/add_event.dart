@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/services/event_logic.dart'; // Adjust the path based on your folder structure
+
 import 'package:hive/pages/event_list.dart';
 
 class EventCreator extends StatefulWidget {
@@ -10,8 +11,9 @@ class EventCreator extends StatefulWidget {
 }
 
 class _EventCreatorState extends State<EventCreator> {
-  TextEditingController _controller =
+  final TextEditingController _controller =
       TextEditingController(); // Declare controller
+
   String eventDescription =
       'http://127.0.0.1:5000/send'; // Variable to hold the event description
 
@@ -69,7 +71,7 @@ class _EventCreatorState extends State<EventCreator> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(
             bottom: 40), // Adjust this value to move the button higher
-        child: Container(
+        child: SizedBox(
           width: 200, // Set a custom width for the button
           height: 70, // Set a custom height for the button
           child: ElevatedButton(
@@ -86,6 +88,7 @@ class _EventCreatorState extends State<EventCreator> {
                     builder: (context) => EventDisplayPage(),
                   ));
             }, // Use the handleAddEvent method when button is pressed
+
             child: const Text(
               "ADD EVENT",
               style: TextStyle(

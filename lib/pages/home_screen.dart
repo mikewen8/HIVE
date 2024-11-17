@@ -59,7 +59,7 @@ class HomeScreenState extends State<HomeScreen> {
                             minimumSize: const Size(1000, 60),
                           ),
                           child: Text(
-                            event['name'],
+                            '${event['name']} (ID: ${event['id']})',
                             style: const TextStyle(fontSize: 16),
                           ),
                         ),
@@ -99,7 +99,7 @@ class HomeScreenState extends State<HomeScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        EventCreator() // this should bte the page of the form
+                        const EventCreator() // this should bte the page of the form
                     ));
           },
           child: const Icon(Icons.add),

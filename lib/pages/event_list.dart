@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http; // For HTTP requests
 import 'package:url_launcher/url_launcher.dart'; // For launching URLs
 
 class EventDisplayPage extends StatefulWidget {
+  const EventDisplayPage({super.key});
+
   @override
   _EventDisplayPageState createState() => _EventDisplayPageState();
 }
@@ -72,11 +74,11 @@ class _EventDisplayPageState extends State<EventDisplayPage> {
         title: const Text("Events", style: TextStyle(fontSize: 24)),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : _errorMessage != null
               ? Center(child: Text('Error: $_errorMessage'))
               : _events.isEmpty
-                  ? Center(child: Text("No events available"))
+                  ? const Center(child: Text("No events available"))
                   : ListView.builder(
                       itemCount: _events.length,
                       itemBuilder: (context, index) {
@@ -87,14 +89,15 @@ class _EventDisplayPageState extends State<EventDisplayPage> {
                           child: ListTile(
                             title: Text(
                               event['name'] ?? 'Unnamed Event',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                     'Name: ${event['name'] ?? 'Unnamed Event'}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold)),
                                 Text(
@@ -105,12 +108,12 @@ class _EventDisplayPageState extends State<EventDisplayPage> {
                                     'Venue: ${event['venue']?.toString() ?? 'Unknown'}'),
                               ],
                             ),
-                            trailing: Icon(Icons.arrow_forward),
+                            trailing: const Icon(Icons.arrow_forward),
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
+                                  builder: (context) => const HomeScreen(),
                                 ),
                               );
                             },
@@ -125,7 +128,7 @@ class _EventDisplayPageState extends State<EventDisplayPage> {
 class EventDetailsPage extends StatelessWidget {
   final Map<String, dynamic> event;
 
-  EventDetailsPage({required this.event});
+  const EventDetailsPage({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +150,7 @@ class EventDetailsPage extends StatelessWidget {
             Text('Address: ${event['address'] ?? 'No address available'}'),
             Text('Location: ${event['location'] ?? 'No location data'}'),
             Text('Description: ${event['description'] ?? 'No description'}'),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
                 final url = event['link'];
@@ -155,11 +158,11 @@ class EventDetailsPage extends StatelessWidget {
                   await launch(url);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Could not open the link')),
+                    const SnackBar(content: Text('Could not open the link')),
                   );
                 }
               },
-              child: Text("View More"),
+              child: const Text("View More"),
             ),
           ],
         ),
