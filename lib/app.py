@@ -11,7 +11,12 @@ app = Flask(__name__)
 CORS(app)  # Allow all origins
 
 logged_user=0
-
+dynamodb = boto3.resource(
+    'dynamodb',
+    aws_access_key_id=aws_access_key,
+    aws_secret_access_key=aws_secret_key,
+    region_name='us-west-2'
+)
 
 
 table = dynamodb.Table('events')
