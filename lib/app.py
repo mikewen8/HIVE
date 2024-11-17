@@ -2,7 +2,11 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
-import os
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 aws_access_key = os.getenv('AWS_ACCESS_KEY_ID')
 aws_secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 
