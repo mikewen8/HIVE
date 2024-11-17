@@ -4,12 +4,14 @@ import boto3
 from botocore.exceptions import BotoCoreError, ClientError
 import os 
 from dotenv import load_dotenv
+from ticketmaster_client import TicketmasterClient
 
 load_dotenv()
 
 aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
 aws_secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
+tkm = TicketmasterClient()
 
 app = Flask(__name__)
 CORS(app)  # Allow all origins
@@ -25,10 +27,25 @@ dynamodb = boto3.resource(
 
 table = dynamodb.Table('events')
 
+
 # need to have a script to upload the fetch data over time
 @app.route('/', methods=['GET'])
+def events():
+     try:
+         response = table.scan()
+         events = response.get('Items', [])  
 
-@app.route('/send', methods=['POST'])
+         # Handle pagination
+         while 'LastEvaluatedKey' in response:
+             response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+             events.extend(response.get('Items', []))
+         # Properly serialize and return the events
+         return jsonify({"events":events})
+     except (BotoCoreError, ClientError) as error:
+         print(f"Error fetching events: {error}")
+         return jsonify({'error': str(error)}), 500
+
+@app.route('/send', methods=['POST','GET'])
 def get_string():
     try:
         # Parse JSON data from the request body
@@ -40,9 +57,17 @@ def get_string():
         if not query:
             return jsonify({'error': 'Description is required'}), 400
 
-        # Process the event (you can save it to a database or do other operations)
-        # Here we're just printing it for demonstration purposes
         print(f"Received event description: {query}")
+    
+        doom = table.scan()
+        pray = doom.get('Items', [])
+
+        while 'LastEvaluatedKey' in doom:
+             doom = table.scan(ExclusiveStartKey=doom['LastEvaluatedKey'])
+             pray.extend(doom.get('Items', []))
+        print(jsonify({'events':pray}))
+        similar_events = tkm.similar_events(jsonify({'events':pray}),query)
+        print(similar_events)
 
         # Send a success response
         return jsonify({'message': 'Event added successfully!'}), 200

@@ -9,7 +9,7 @@ class EventService {
 
   static Future<bool> addEvent(String query) async {
     try {
-      final response = await http.post(
+      final send = await http.post(
         Uri.parse(api),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
@@ -17,7 +17,7 @@ class EventService {
         }),
       );
 
-      if (response.statusCode == 200) {
+      if (send.statusCode == 200) {
         // Successfully added event
         return true;
       } else {
