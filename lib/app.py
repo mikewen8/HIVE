@@ -14,6 +14,8 @@ dynamodb = boto3.resource(
     aws_secret_access_key='VyAU30FsmHqQzyzHpGGq6nfrNXkZrpC0P2O7J1ws',
     region_name='us-east-1'
 )
+
+table = dynamodb.Table('events')
 def get_userID():
     return 2
 
@@ -28,24 +30,27 @@ def search_events():
 
     return " "
 
+
 # need to have a script to upload the fetch data over time
+@app.route('/', methods=['GET'])
+
+
 
 @app.route('/events', methods=['GET'])
 def get_events():
-    table = dynamodb.Table('events')
-    try:
-        response = table.scan()
-        events = response.get('items', []) 
+     try:
+         response = table.scan()
+         events = response.get('Items', [])  
 
-        while 'LastEvaluatedKey' in response:
-            response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
-            events.extend(response.get('Items', []))
-
-        return jsonify(events)  
-    except (BotoCoreError, ClientError) as error:
-        print(f"Error fetching events: {error}")
-        return jsonify({'error': str(error)}), 500  
-
+         # Handle pagination
+         while 'LastEvaluatedKey' in response:
+             response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+             events.extend(response.get('Items', []))
+         # Properly serialize and return the events
+         return jsonify({"events":events})
+     except (BotoCoreError, ClientError) as error:
+         print(f"Error fetching events: {error}")
+         return jsonify({'error': str(error)}), 500
 """
 @app.route('/tylers_boyfriend',methods=['GET'])
 def get_results():
@@ -76,6 +81,3 @@ def get_results():
 
 
 #-------------------------------------
-
-if __name__ == "__main__":
-    app.run(debug=True)
