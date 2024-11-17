@@ -85,7 +85,7 @@ class _EventCreatorState extends State<EventCreator> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => EventDisplayPage(),
+                    builder: (context) => const EventDisplayPage(),
                   ));
             }, // Use the handleAddEvent method when button is pressed
 
