@@ -6,6 +6,7 @@ from langchain_community.vectorstores import FAISS
 import requests
 from pandas import DataFrame
 import json
+import ast
 from dotenv import load_dotenv
 import os
 
@@ -76,13 +77,14 @@ class TicketmasterClient:
         
         json_event_list = json.dumps(event_dict)
         return json_event_list
-        
-    # Get events similar to query. Requires list of events and query
-    def similar_events(self,json_event_list,query):
+
+    
+    
+    def similar_events(self, json_event_list, query):
         event_list = json.loads(json_event_list)['events']
         
         doc_list = []
-        for n in range(0,len(event_list)):
+        for n in range(len(event_list)):
             event_info = event_list[n]
             document = Document(page_content=str(event_info))
             doc_list.append(document)
@@ -91,16 +93,15 @@ class TicketmasterClient:
         db = FAISS.from_documents(doc_list, embeddings)
         similar_docs = db.similarity_search(query)
         
-        
-        similar_events = {}
         sim_list = []
-        for n in range(0,len(similar_docs)):
-            sim_list.append(similar_docs[n].page_content)
-            
-        similar_events['events'] = sim_list
-    
-        json_sim_events = json.dumps(similar_events)
-        return json_sim_events
+        for n in range(len(similar_docs)):
+            sim_list.append(ast.literal_eval(similar_docs[n].page_content))
+        
+        similar_events = {'events':sim_list}
+        
+        json_similar_events = json.dumps(similar_events)
+        return json_similar_events
+
         
 
         

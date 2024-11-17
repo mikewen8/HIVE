@@ -59,7 +59,7 @@ class HomeScreenState extends State<HomeScreen> {
                             minimumSize: const Size(1000, 60),
                           ),
                           child: Text(
-                            '${event['name']}',
+                            event['name'],
                             style: const TextStyle(fontSize: 16),
                           ),
                         ),

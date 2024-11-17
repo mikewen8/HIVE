@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/services/event_logic.dart'; // Adjust the path based on your folder structure
+import 'package:hive/pages/event_list.dart';
 
 class EventCreator extends StatefulWidget {
   const EventCreator({super.key});
@@ -11,7 +12,8 @@ class EventCreator extends StatefulWidget {
 class _EventCreatorState extends State<EventCreator> {
   TextEditingController _controller =
       TextEditingController(); // Declare controller
-  String eventDescription = ""; // Variable to hold the event description
+  String eventDescription =
+      'http://127.0.0.1:5000/send'; // Variable to hold the event description
 
   @override
   void dispose() {
@@ -76,8 +78,14 @@ class _EventCreatorState extends State<EventCreator> {
                 borderRadius: BorderRadius.circular(30), // Rounded corners
               ),
             ),
-            onPressed:
-                handleAddEvent, // Use the handleAddEvent method when button is pressed
+            onPressed: () {
+              handleAddEvent();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EventDisplayPage(),
+                  ));
+            }, // Use the handleAddEvent method when button is pressed
             child: const Text(
               "ADD EVENT",
               style: TextStyle(

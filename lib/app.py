@@ -9,6 +9,7 @@ from ticketmaster_client import TicketmasterClient
 
 load_dotenv()
 
+
 aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
 aws_secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
@@ -28,23 +29,35 @@ dynamodb = boto3.resource(
 
 table = dynamodb.Table('events')
 
-
+""""
 # need to have a script to upload the fetch data over time
-@app.route('/', methods=['GET'])
-def events():
-     try:
-         response = table.scan()
-         events = response.get('Items', [])  
+@app.route('/', methods=['GET','POST'])
+def test2():
+    try:
+        # Parse JSON data from the request body
+        data = request.get_json()
 
-         # Handle pagination
-         while 'LastEvaluatedKey' in response:
-             response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
-             events.extend(response.get('Items', []))
-         # Properly serialize and return the events         
-         return jsonify({"events":events})
-     except (BotoCoreError, ClientError) as error:
-         print(f"Error fetching events: {error}")
-         return jsonify({'error': str(error)}), 500
+        # Extract event description from the request body
+        query = "find me seahawks games"
+
+        if not query:
+            return jsonify({'error': 'Description is required'}), 400    
+        doom = table.scan()
+        pray = doom.get('Items', [])
+
+        while 'LastEvaluatedKey' in doom:
+             doom = table.scan(ExclusiveStartKey=doom['LastEvaluatedKey'])
+             pray.extend(doom.get('Items', []))
+        prayer={'events':pray}
+        similar_events = tkm.similar_events(json.dumps(prayer),query)
+        # Send a success response
+        return json.dumps(similar_events)
+
+    except Exception as e:
+        # Handle unexpected errors
+        print(f"Error: {e}")
+        return jsonify({'error': 'An error occurred'}), 500
+"""
 
 @app.route('/send', methods=['POST','GET'])
 def get_string():
@@ -58,7 +71,7 @@ def get_string():
         if not query:
             return jsonify({'error': 'Description is required'}), 400
 
-        print(f"Received event description: {query}")
+        #print(f"Received event description: {query}")
     
         doom = table.scan()
         pray = doom.get('Items', [])
@@ -67,16 +80,22 @@ def get_string():
              doom = table.scan(ExclusiveStartKey=doom['LastEvaluatedKey'])
              pray.extend(doom.get('Items', []))
         prayer={'events':pray}
-        similar_events = tkm.similar_events(json.dumps(prayer),query)
-        print(similar_events)
-
+        #sending = tkm.similar_events(json.dumps(prayer),query)
         # Send a success response
-        return jsonify({'message': 'Event added successfully!'}), 200
+        #print(similar_events)
+        #sending.replace('\\','')
+        sending = tkm.similar_events(json.dumps(prayer),query)
+        return sending
 
     except Exception as e:
         # Handle unexpected errors
         print(f"Error: {e}")
         return jsonify({'error': 'An error occurred'}), 500
+
+
+from flask import request, jsonify
+
+@app.route('/', methods=['GET', 'POST'])
 
 
 @app.route('/events', methods=['GET'])
@@ -94,7 +113,7 @@ def get_events():
      except (BotoCoreError, ClientError) as error:
          print(f"Error fetching events: {error}")
          return jsonify({'error': str(error)}), 500
-    
+     
 @app.route('/add_event', methods=['POST'])
 def add_event():
     
@@ -134,7 +153,7 @@ def add_event():
     }
 
     table.put_item(Item=new_event)
-    print(f"Uploaded event: {new_event['name']}")
+    #print(f"Uploaded event: {new_event['name']}")
     return jsonify({"message": f"Event '{new_event['name']}' added successfully"}), 201
 
 
