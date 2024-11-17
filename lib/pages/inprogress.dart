@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hive/services/fetch.dart'; // Adjust the path based on your folder structure
+import 'package:HIVE/pages/add_event.dart';
+import 'package:HIVE/services/fetch.dart'; // Adjust the path based on your folder structure
+import 'package:HIVE/pages/details.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -45,25 +47,16 @@ class HomeScreenState extends State<HomeScreen> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            // Define what happens when the button is pressed
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                title: Text(event['name']),
-                                content:
-                                    Text('Event ID: ${event['description']}'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Close'),
-                                  ),
-                                ],
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailsScreen(eventId: event['id']),
                               ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            minimumSize: Size(1000,
-                                60), // Set a smaller width and larger height for the button
+                            minimumSize: const Size(1000, 60),
                           ),
                           child: Text(
                             '${event['name']} (ID: ${event['id']})',
@@ -98,6 +91,14 @@ class HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    const EventCreator() // this should bte the page of the form
+                ));
+      }),
     );
   }
 }

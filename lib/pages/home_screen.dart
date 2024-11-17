@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hive/services/fetch.dart'; // Adjust the path based on your folder structure
+import 'package:HIVE/pages/add_event.dart';
+import 'package:HIVE/services/fetch.dart'; // Adjust the path based on your folder structure
+import 'package:HIVE/pages/details.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,32 +38,43 @@ class HomeScreenState extends State<HomeScreen> {
                 final event = snapshot.data![index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 200.0),
+                      vertical: 8.0, horizontal: 16.0),
                   child: SizedBox(
-                    width:
-                        10, //double.infinity, // Make the button fill the container width
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Define what happens when the button is pressed
-                        showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                            title: Text(event['name']),
-                            // this needs to be description
-                            content: Text('Event ID: ${event['description']}'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Close'),
+                    width: 200, // Smaller width for the button
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .center, // Center the button horizontally
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailsScreen(eventId: event['id']),
                               ),
-                            ],
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(1000, 60),
                           ),
-                        );
-                      },
-                      child: Text(
-                        '${event['name']} (ID: ${event['id']})',
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                          child: Text(
+                            '${event['name']}',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: IconButton(
+                            icon: const Icon(Icons.more_vert),
+                            onPressed: () {
+                              // Handle the icon press
+                              // have a delete option here to remove from the database
+                              print('More options for event ${event['id']}');
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -77,6 +90,20 @@ class HomeScreenState extends State<HomeScreen> {
             );
           }
         },
+      ),
+      floatingActionButton: Align(
+        alignment: Alignment.center,
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const EventCreator() // this should bte the page of the form
+                    ));
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
