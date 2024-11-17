@@ -26,7 +26,7 @@ Future<List<Map<String, dynamic>>> fetchEventList() async {
           .map((e) => {
                 'name': e['name'],
                 'description': e['description'],
-                'id': e['Event_id']
+                'id': e['event_id']
               })
           .toList();
     } else {

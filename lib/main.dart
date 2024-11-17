@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 //import 'package:hive/pages/inprogress.dart';
-//import 'package:hive/pages/home_screen.dart';
+import 'package:hive/pages/home_screen.dart';
 import 'package:hive/pages/login.dart';
 
 void main() {
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: HomeScreen(),
     );
   }
 }

@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-aws_access_key = os.getenv('AWS_ACCESS_KEY_ID')
-aws_secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+aws_access_key = os.environ.get('AWS_ACCESS_KEY_ID')
+aws_secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
 
 app = Flask(__name__)
@@ -30,6 +30,7 @@ table = dynamodb.Table('events')
 
 
 
+
 @app.route('/events', methods=['GET'])
 def get_events():
      try:
@@ -45,7 +46,9 @@ def get_events():
      except (BotoCoreError, ClientError) as error:
          print(f"Error fetching events: {error}")
          return jsonify({'error': str(error)}), 500
-     
+    
+
+
 
 """
 @app.route('/tylers_boyfriend',methods=['GET'])
