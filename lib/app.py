@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
@@ -28,7 +28,29 @@ table = dynamodb.Table('events')
 # need to have a script to upload the fetch data over time
 @app.route('/', methods=['GET'])
 
+@app.route('/send', methods=['POST'])
+def get_string():
+    try:
+        # Parse JSON data from the request body
+        data = request.get_json()
 
+        # Extract event description from the request body
+        query = data.get('query')
+
+        if not query:
+            return jsonify({'error': 'Description is required'}), 400
+
+        # Process the event (you can save it to a database or do other operations)
+        # Here we're just printing it for demonstration purposes
+        print(f"Received event description: {query}")
+
+        # Send a success response
+        return jsonify({'message': 'Event added successfully!'}), 200
+
+    except Exception as e:
+        # Handle unexpected errors
+        print(f"Error: {e}")
+        return jsonify({'error': 'An error occurred'}), 500
 
 
 @app.route('/events', methods=['GET'])
@@ -47,7 +69,47 @@ def get_events():
          print(f"Error fetching events: {error}")
          return jsonify({'error': str(error)}), 500
     
+@app.route('/add_event', methods=['POST'])
+def add_event():
+    
+    #user_id = logged_user  
 
+    data = request.get_json()
+
+    #getting from front end
+    event_id = data.get('event_id')
+    name = data.get('name')
+    type = data.get('type')
+    genre = data.get('genre')
+    venue = data.get('venue')
+    address = data.get('address')
+    date = data.get('date')
+    time = data.get('time')
+    location = data.get('location')
+    link = data.get('link')
+    description = data.get('description')
+
+
+    if event_id is None or name is None or type is None or genre is None or venue is None or address is None or date is None or time is None or location is None or link is None or description is None:
+        return redirect("/index?err_msg= bad_med_input")
+    
+    new_event = {
+        "event_id": event_id,
+        "name": name,
+        "type": type,
+        "genre": genre,
+        "venue": venue,
+        "address": address, 
+        "date": date,
+        "time": time,
+        "location": location,
+        "link": link,
+        "description": description
+    }
+
+    table.put_item(Item=new_event)
+    print(f"Uploaded event: {new_event['name']}")
+    return jsonify({"message": f"Event '{new_event['name']}' added successfully"}), 201
 
 
 """
